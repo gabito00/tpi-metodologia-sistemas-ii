@@ -4,6 +4,8 @@ from pathlib import Path
 
 from src.application import (
     ReportePorEstado,
+    ReportePorPrioridad,
+    SolicitudNoEncontrada,
     SolicitudService,
 )
 from src.domain import (
@@ -235,7 +237,71 @@ class SolicitudServiceTest(
                 solicitud,
                 recuperada,
             )
+    def test_asignacion_cambia_estado(
+        self,
+    ) -> None:
+        solicitud = self.crear_solicitud()
 
+        actualizada = (
+            self.servicio
+            .asignar_responsable(
+                solicitud_id=(
+                    solicitud.identificador
+                ),
+                responsable_id=(
+                    self.responsable
+                    .identificador
+                ),
+            )
+        )
+
+        self.assertEqual(
+            Estado.EN_PROCESO,
+            actualizada.estado,
+        )
+
+        self.assertEqual(
+            self.responsable.identificador,
+            actualizada.responsable_id,
+        )
+
+    def test_informa_solicitud_inexistente(
+        self,
+    ) -> None:
+        with self.assertRaisesRegex(
+            SolicitudNoEncontrada,
+            "No existe la solicitud 99",
+        ):
+            self.servicio.cambiar_estado(
+                solicitud_id=99,
+                nuevo_estado=Estado.RESUELTA,
+            )
+
+    def test_reporte_por_prioridad(
+        self,
+    ) -> None:
+        self.crear_solicitud(
+            Prioridad.MEDIA
+        )
+        self.crear_solicitud(
+            Prioridad.ALTA
+        )
+
+        reporte = ReportePorPrioridad()
+
+        resultado = reporte.generar(
+            self.repositorio
+            .listar_solicitudes()
+        )
+
+        self.assertEqual(
+            {
+                "BAJA": 0,
+                "MEDIA": 1,
+                "ALTA": 1,
+            },
+            resultado,
+        )
 
 if __name__ == "__main__":
     unittest.main()
