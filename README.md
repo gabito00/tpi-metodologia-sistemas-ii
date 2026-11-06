@@ -49,7 +49,11 @@ El proyecto no requiere dependencias externas.
 ├── tests
 │   └── test_solicitudes.py
 └── docs
-    └── DIAGNOSTICO.md
+    ├── CODE_REVIEW.md
+    ├── DIAGNOSTICO.md
+    ├── PRUEBAS.md
+    ├── REFACTORING.md
+    └── USO_IA.md
 ```
 
 ## Capas
@@ -121,6 +125,9 @@ La clase inicial se dividió en dominio, aplicación, infraestructura y reportes
 - `estado-inicial`: versión funcional anterior al diagnóstico.
 - `etapa-diagnostico`: diagnóstico de calidad y deuda técnica.
 - `etapa-refactoring`: versión reorganizada mediante refactoring seguro.
+- `etapa-pruebas`: ampliación y documentación de las pruebas.
+- `estado-refactorizado`: versión final del código verificada.
+- `etapa-docs`: documentación técnica completa.
 
 ## Datos
 
