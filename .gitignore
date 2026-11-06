@@ -1,0 +1,4 @@
+__pycache__/
+*.py[cod]
+datos.json
+datos_demo.json
